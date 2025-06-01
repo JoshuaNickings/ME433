@@ -19,7 +19,8 @@ void gpio_callback(uint gpio, uint32_t events) {
     // Put the GPIO event(s) that just happened into event_str
     // so we can print it
     gpio_event_string(event_str, events);
-    printf("GPIO %d %s\n", gpio, event_str);
+    // printf("GPIO %d %s\n", gpio, event_str);
+    button_press = button_press + 1;
     printf("Times Button Has Been Pressed: %d\n", button_press);
 }
 
