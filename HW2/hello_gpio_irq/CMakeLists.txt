@@ -28,21 +28,25 @@ set(PICO_BOARD pico2 CACHE STRING "Board type")
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(blink_simple C CXX ASM)
+project(hello_gpio_irq C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(blink_simple
-        blink_simple.c
-)
+add_executable(hello_gpio_irq
+        hello_gpio_irq.c
+        )
 
 # pull in common dependencies
-target_link_libraries(blink_simple pico_stdlib)
+target_link_libraries(hello_gpio_irq pico_stdlib)
 
-# create map/bin/hex/uf2 file etc.
-pico_add_extra_outputs(blink_simple)
+# enable usb output, disable uart output
+pico_enable_stdio_usb(hello_gpio_irq 1)
+pico_enable_stdio_uart(hello_gpio_irq 0)
 
-# call pico_set_program_url to set path to example on github, so users can find the source for an example via picotool
+# create map/bin/hex file etc.
+pico_add_extra_outputs(hello_gpio_irq)
+
+# add url via pico_set_program_url
