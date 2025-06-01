@@ -11,6 +11,7 @@
 #define GPIO_WATCH_PIN 2
 
 static char event_str[128];
+static int button_press = 0;
 
 void gpio_event_string(char *buf, uint32_t events);
 
@@ -19,6 +20,7 @@ void gpio_callback(uint gpio, uint32_t events) {
     // so we can print it
     gpio_event_string(event_str, events);
     printf("GPIO %d %s\n", gpio, event_str);
+    printf("Times Button Has Been Pressed: %d\n", button_press);
 }
 
 int main() {
