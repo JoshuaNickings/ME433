@@ -42,11 +42,13 @@ pico_set_program_version(ext_ram_23k256chip "0.1")
 
 # Modify the below lines to enable/disable output over UART/USB
 pico_enable_stdio_uart(ext_ram_23k256chip 0)
-pico_enable_stdio_usb(ext_ram_23k256chip 0)
+pico_enable_stdio_usb(ext_ram_23k256chip 1)
 
 # Add the standard library to the build
 target_link_libraries(ext_ram_23k256chip
         pico_stdlib)
+target_link_libraries(ext_ram_23k256chip
+        hardware_spi)
 
 # Add the standard include files to the build
 target_include_directories(ext_ram_23k256chip PRIVATE
