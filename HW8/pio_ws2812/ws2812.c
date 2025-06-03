@@ -9,6 +9,7 @@
 
 #include "pico/stdlib.h"
 #include "hardware/pio.h"
+#include "hardware/pwm.h"
 #include "hardware/clocks.h"
 #include "ws2812.pio.h"
 
@@ -25,15 +26,18 @@
  *  When RGBW is used with urgb_u32(), the White channel will be ignored (off).
  *
  */
+
 #define IS_RGBW false
 #define NUM_PIXELS 4
 
 #ifdef PICO_DEFAULT_WS2812_PIN
 #define WS2812_PIN PICO_DEFAULT_WS2812_PIN
 #else
-// default to pin 2 if the board doesn't have a default WS2812 pin defined
+// default to pin 15 if the board doesn't have a default WS2812 pin defined
 #define WS2812_PIN 15
 #endif
+
+#define RCServoPin 16
 
 // Check the pin is compatible with the platform
 #if WS2812_PIN >= NUM_BANK0_GPIOS
@@ -118,11 +122,18 @@ void setLEDs(PIO, uint, wsColor *);
 
 wsColor HSBtoRGB(float, float, float);
 
+void init_pwm(int, float, uint16_t);
+
 
 int main() {
     //set_sys_clock_48();
     stdio_init_all();
     printf("WS2812 Smoke Test, using pin %d\n", WS2812_PIN);
+    
+    float div_val = 50;
+    uint16_t wrap_val = 60000;
+
+    init_pwm(RCServoPin, div_val, wrap_val);
 
     // todo get free sm
     PIO pio;
@@ -169,6 +180,16 @@ int main() {
 
     wsColor led_color_stage[4];
 
+
+    uint16_t rcservo_pmw_traj[360];
+
+    for (int j = 0; j < 360; j++) {
+        rcservo_pmw_traj[j] = (wrap_val * 0.1 / 180) + (wrap_val * 0.025);
+        if (j > 180) {
+             rcservo_pmw_traj[j] = (wrap_val * -0.1 / 180) + (wrap_val * 0.225);
+        }
+    }
+
     int t = 0;
     while (1) {
         for (int t = 0; t < 360; t++){
@@ -178,6 +199,8 @@ int main() {
             led_color_stage[2] = led_color_cycle[t*4+2];
             led_color_stage[3] = led_color_cycle[t*4+3];
             setLEDs(pio, sm, led_color_stage);
+
+            pwm_set_gpio_level(RCServoPin, rcservo_pmw_traj[t]);
 
             sleep_us(5000000/360);
 
@@ -281,4 +304,14 @@ wsColor HSBtoRGB(float hue, float sat, float brightness) {
     c.g = igreen;
     c.b = iblue;
     return c;
+}
+
+void init_pwm(int pin, float d, uint16_t w){
+    gpio_set_function(pin, GPIO_FUNC_PWM); // Set the LED Pin to be PWM
+    uint slice_num = pwm_gpio_to_slice_num(pin); // Get PWM slice number
+    float div = d; // must be between 1-255
+    pwm_set_clkdiv(slice_num, div); // divider
+    uint16_t wrap = w; // when to rollover, must be less than 65535
+    pwm_set_wrap(slice_num, wrap);
+    pwm_set_enabled(slice_num, true); // turn on the PWM
 }

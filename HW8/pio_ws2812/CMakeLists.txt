@@ -44,7 +44,8 @@ pico_generate_pio_header(pio_ws2812 ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio OUTPUT_
 
 target_sources(pio_ws2812 PRIVATE ws2812.c)
 
-target_link_libraries(pio_ws2812 PRIVATE pico_stdlib hardware_pio)
+target_link_libraries(pio_ws2812 PRIVATE pico_stdlib hardware_pwm hardware_pio)
+
 pico_add_extra_outputs(pio_ws2812)
 
 # add url via pico_set_program_url
