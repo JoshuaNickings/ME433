@@ -24,8 +24,11 @@ void mcp23008_gp7_blink();
 int main()
 {
     stdio_init_all();
-    pico_led_init();
-    mpc23008_init();
+   
+    while (!stdio_usb_connected()) {
+        sleep_ms(100);
+    }
+    printf("Start!\n");
 
     // I2C Initialisation. Using it at 400Khz.
     i2c_init(I2C_PORT, 400*1000);
@@ -35,6 +38,9 @@ int main()
     gpio_pull_up(I2C_SDA);
     gpio_pull_up(I2C_SCL);
     // For more examples of I2C use see https://github.com/raspberrypi/pico-examples/tree/master/i2c
+    
+    pico_led_init();
+    mpc23008_init();
 
     while (true) {
         pico_led_blink();
@@ -45,13 +51,16 @@ int main()
 void pico_led_init() {
     gpio_init(PICO_DEFAULT_LED_PIN);
     gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
+    printf("LED Initialization done! \n");
 }
 
 void pico_led_blink() {
     gpio_put(PICO_DEFAULT_LED_PIN, 1);
     sleep_ms(100);
     gpio_put(PICO_DEFAULT_LED_PIN, 0);
+    printf("LED Blink! \n");
 }
+
 
 void mpc23008_init() {
     uint8_t buf[2];
@@ -60,6 +69,7 @@ void mpc23008_init() {
     buf[1] = 0b01111111;
 
     i2c_write_blocking(i2c_default, 0b0100000, buf, 2, false);
+    printf("MPC23008 initialization done!\n");
 }
 
 void setPin (unsigned char address, unsigned char reg, unsigned char value) {
@@ -69,6 +79,7 @@ void setPin (unsigned char address, unsigned char reg, unsigned char value) {
     buf[0] = reg;
     buf[1] = value;
     i2c_write_blocking(i2c_default, address, buf, 2, false);
+    printf("Pin set!\n");
 }
 
 unsigned char readPin (unsigned char address, unsigned char reg) {
@@ -79,13 +90,15 @@ unsigned char readPin (unsigned char address, unsigned char reg) {
     i2c_read_blocking(i2c_default, address, &buf, 1, false);
 
     return buf;
+    printf("Pin read!\n");
 }
 
 
 void mcp23008_gp7_blink() {
-    setPin(0b01000000, 1, 0b10000000);
+    setPin(0b0100000, 10, 0b10000000);
     sleep_ms(250);
-    setPin(0b01000000, 1, 0);
+    setPin(0b0100000, 10, 0);
+    printf("GP7 shoulda just blinked!\n");
 }
 // TO SEND DATA
 // i2c_write_blocking(i2c_default, ADDR, buf, 2, false);
