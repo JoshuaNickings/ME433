@@ -20,6 +20,7 @@ unsigned char readPin(unsigned char, unsigned char);
 
 // Program specific functions
 void mcp23008_gp7_blink();
+void mcp23008_gp0butt_gp7led();
 
 int main()
 {
@@ -44,7 +45,8 @@ int main()
 
     while (true) {
         pico_led_blink();
-        mcp23008_gp7_blink();
+        // mcp23008_gp7_blink();
+        mcp23008_gp0butt_gp7led();
     }
 }
 
@@ -56,7 +58,7 @@ void pico_led_init() {
 
 void pico_led_blink() {
     gpio_put(PICO_DEFAULT_LED_PIN, 1);
-    sleep_ms(100);
+    sleep_ms(250);
     gpio_put(PICO_DEFAULT_LED_PIN, 0);
     printf("LED Blink! \n");
 }
@@ -72,7 +74,7 @@ void mpc23008_init() {
     printf("MPC23008 initialization done!\n");
 }
 
-void setPin (unsigned char address, unsigned char reg, unsigned char value) {
+void setPin(unsigned char address, unsigned char reg, unsigned char value) {
     // for I2C Writing
     uint8_t buf[2];
 
@@ -82,15 +84,14 @@ void setPin (unsigned char address, unsigned char reg, unsigned char value) {
     printf("Pin set!\n");
 }
 
-unsigned char readPin (unsigned char address, unsigned char reg) {
+unsigned char readPin(unsigned char address, unsigned char reg) {
     // for I2C Reading
     unsigned char buf;
 
     i2c_write_blocking(i2c_default, address, &reg, 1, true);
     i2c_read_blocking(i2c_default, address, &buf, 1, false);
-
-    return buf;
     printf("Pin read!\n");
+    return buf;
 }
 
 
@@ -100,6 +101,18 @@ void mcp23008_gp7_blink() {
     setPin(0b0100000, 10, 0);
     printf("GP7 shoulda just blinked!\n");
 }
+
+void mcp23008_gp0butt_gp7led() {
+    //MCP23008 controlled GP0 button determining status of GP7 LED
+    
+    unsigned char val = readPin(0b0100000, 9) & 1;
+    val = val << 7;
+
+    printf("%d\n", val);
+
+    setPin(0b0100000, 10, val);
+}
+
 // TO SEND DATA
 // i2c_write_blocking(i2c_default, ADDR, buf, 2, false);
 
