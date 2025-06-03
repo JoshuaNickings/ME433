@@ -35,7 +35,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(display3 display3.c ssd1306.c)
+add_executable(display3 display3.c ssd1306.c heartbeat.c)
 
 pico_set_program_name(display3 "display3")
 pico_set_program_version(display3 "0.1")
@@ -56,6 +56,7 @@ target_include_directories(display3 PRIVATE
 # Add any user requested libraries
 target_link_libraries(display3 
         hardware_i2c
+        hardware_adc
         )
 
 pico_add_extra_outputs(display3)
