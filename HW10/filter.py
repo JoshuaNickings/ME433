@@ -34,13 +34,11 @@ def sampleRate(t):
 
 def generate_fft(input_t, input_data):
     dt = sampleRate(input_t) ** -1
-    t = np.arange(0.0, 1.0, dt) # 10s; "dt" is the step time which is 1 over the sample rate
+    t = np.arange(input_t[0], input_t[-1], dt) # 10s; "dt" is the step time which is 1 over the sample rate
     # a constant plus 100Hz and 1000Hz
     s = input_data
 
     Fs = sampleRate(input_t) # sample rate, time interval between first and last data point divided by total number of data points
-    Ts = dt; # sampling interval
-    ts = np.arange(0,t[-1],dt) # time vector
     y = s # the data to make the fft from
     n = len(y) # length of the signal
     k = np.arange(n)
@@ -63,17 +61,3 @@ generate_fft(tA, dataA)
 generate_fft(tB, dataB)
 generate_fft(tC, dataC)
 generate_fft(tD, dataD)
-
-def maf(t, data, avg_num):
-    maf_t = []
-    maf_data = []
-    for i in range(len(data)):
-        if i < avg_num - 1:
-            continue
-        sum = 0
-        for j in range(avg_num):
-            sum += data[i - j]
-        val = sum/avg_num
-
-        maf_t.append(t[i])
-        maf_data.append(val)
