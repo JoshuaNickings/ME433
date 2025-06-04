@@ -2,7 +2,11 @@
 #include "pico/stdlib.h"
 #include "hardware/pwm.h"
 
-#define LEDPin FIXITBOY!!
+// THIS CODE IS NOT MEANT FOR FINAL SUBMISSION
+// IT WAS ONLY USED TO WRITE OUT AND TEST IDEAS FOR THE FINAL SUBMISSION
+// FINAL SUBMISSION FILE NAME: "ws2812.c"
+
+#define LEDPin 16
 int main()
 {
     stdio_init_all();

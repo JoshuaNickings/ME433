@@ -129,6 +129,13 @@ int main() {
     //set_sys_clock_48();
     stdio_init_all();
     printf("WS2812 Smoke Test, using pin %d\n", WS2812_PIN);
+
+    /*
+    // DEBUGGING CODE
+    while (!stdio_usb_connected()) {
+        sleep_ms(100);
+    }
+    */
     
     float div_val = 50;
     uint16_t wrap_val = 60000;
@@ -184,10 +191,11 @@ int main() {
     uint16_t rcservo_pmw_traj[360];
 
     for (int j = 0; j < 360; j++) {
-        rcservo_pmw_traj[j] = (wrap_val * 0.1 / 180) + (wrap_val * 0.025);
+        rcservo_pmw_traj[j] = (j * wrap_val * 0.1 / 180) + (wrap_val * 0.025);
         if (j > 180) {
-             rcservo_pmw_traj[j] = (wrap_val * -0.1 / 180) + (wrap_val * 0.225);
+             rcservo_pmw_traj[j] = (j * wrap_val * -0.1 / 180) + (wrap_val * 0.225);
         }
+        // printf("%d %d %f\t\t",j, rcservo_pmw_traj[j], (((float) rcservo_pmw_traj[j])/wrap_val));
     }
 
     int t = 0;
