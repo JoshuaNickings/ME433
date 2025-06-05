@@ -33,6 +33,7 @@
 #include "usb_descriptors.h"
 
 #include "hardware/gpio.h"
+#include <math.h>
 
 #define UP_BUTTON     12
 #define RIGHT_BUTTON  13
@@ -63,6 +64,8 @@ void hid_task(void);
 
 volatile absolute_time_t button_time;
 volatile int was_pressed = 0;
+volatile int mode = 1;
+volatile int angle = 0;
 
 /*------------- MAIN -------------*/
 int main(void)
@@ -164,90 +167,105 @@ static void send_hid_report(uint8_t report_id, uint32_t btn)
 
     case REPORT_ID_MOUSE:
     {
-      if (!gpio_get(UP_BUTTON)) {
-        int speed = 1;
-        if (was_pressed == 0) {
-          button_time = get_absolute_time();
-          was_pressed = 1;
-        } else {
-          if (((to_us_since_boot(get_absolute_time() - button_time)) >= 250000) && ((to_us_since_boot(get_absolute_time() - button_time)) < 500000)) {
-            speed = 2;
-          } else if ((to_us_since_boot(get_absolute_time() - button_time)) < 750000) {
-            speed = 3;
-          } else if ((to_us_since_boot(get_absolute_time() - button_time)) < 1000000) {
-            speed = 5;
+      if (!gpio_get(TOGGLE_BUTTON)){
+        mode = !mode;
+      }  
+      if (mode) {
+        gpio_put(TOGGLE_LED, 1);
+        if (!gpio_get(UP_BUTTON)) {
+          int speed = 1;
+          if (was_pressed == 0) {
+            button_time = get_absolute_time();
+            was_pressed = 1;
           } else {
-            speed = 10;
+            if (((to_us_since_boot(get_absolute_time() - button_time)) >= 250000) && ((to_us_since_boot(get_absolute_time() - button_time)) < 500000)) {
+              speed = 2;
+            } else if ((to_us_since_boot(get_absolute_time() - button_time)) < 750000) {
+              speed = 3;
+            } else if ((to_us_since_boot(get_absolute_time() - button_time)) < 1000000) {
+              speed = 5;
+            } else {
+              speed = 10;
+            }
           }
-        }
 
-        tud_hid_mouse_report(REPORT_ID_MOUSE, 0x00, 0, (-1 * speed), 0, 0);
-        
-      } else if (!gpio_get(RIGHT_BUTTON)) {
-        
-        int speed = 1;
-        if (was_pressed == 0) {
-          button_time = get_absolute_time();
-          was_pressed = 1;
-        } else {
-          if (((to_us_since_boot(get_absolute_time() - button_time)) >= 250000) && ((to_us_since_boot(get_absolute_time() - button_time)) < 500000)) {
-            speed = 2;
-          } else if ((to_us_since_boot(get_absolute_time() - button_time)) < 750000) {
-            speed = 3;
-          } else if ((to_us_since_boot(get_absolute_time() - button_time)) < 1000000) {
-            speed = 5;
+          tud_hid_mouse_report(REPORT_ID_MOUSE, 0x00, 0, (-1 * speed), 0, 0);
+          
+        } else if (!gpio_get(RIGHT_BUTTON)) {
+          
+          int speed = 1;
+          if (was_pressed == 0) {
+            button_time = get_absolute_time();
+            was_pressed = 1;
           } else {
-            speed = 10;
+            if (((to_us_since_boot(get_absolute_time() - button_time)) >= 250000) && ((to_us_since_boot(get_absolute_time() - button_time)) < 500000)) {
+              speed = 2;
+            } else if ((to_us_since_boot(get_absolute_time() - button_time)) < 750000) {
+              speed = 3;
+            } else if ((to_us_since_boot(get_absolute_time() - button_time)) < 1000000) {
+              speed = 5;
+            } else {
+              speed = 10;
+            }
           }
-        }
 
-        tud_hid_mouse_report(REPORT_ID_MOUSE, 0x00, speed, 0, 0, 0);
+          tud_hid_mouse_report(REPORT_ID_MOUSE, 0x00, speed, 0, 0, 0);
 
-      } else if (!gpio_get(DOWN_BUTTON)) {
-        
-        int speed = 1;
-        if (was_pressed == 0) {
-          button_time = get_absolute_time();
-          was_pressed = 1;
-        } else {
-          if (((to_us_since_boot(get_absolute_time() - button_time)) >= 250000) && ((to_us_since_boot(get_absolute_time() - button_time)) < 500000)) {
-            speed = 2;
-          } else if ((to_us_since_boot(get_absolute_time() - button_time)) < 750000) {
-            speed = 3;
-          } else if ((to_us_since_boot(get_absolute_time() - button_time)) < 1000000) {
-            speed = 5;
+        } else if (!gpio_get(DOWN_BUTTON)) {
+          
+          int speed = 1;
+          if (was_pressed == 0) {
+            button_time = get_absolute_time();
+            was_pressed = 1;
           } else {
-            speed = 10;
+            if (((to_us_since_boot(get_absolute_time() - button_time)) >= 250000) && ((to_us_since_boot(get_absolute_time() - button_time)) < 500000)) {
+              speed = 2;
+            } else if ((to_us_since_boot(get_absolute_time() - button_time)) < 750000) {
+              speed = 3;
+            } else if ((to_us_since_boot(get_absolute_time() - button_time)) < 1000000) {
+              speed = 5;
+            } else {
+              speed = 10;
+            }
           }
-        }
 
-        tud_hid_mouse_report(REPORT_ID_MOUSE, 0x00, 0, speed, 0, 0);
+          tud_hid_mouse_report(REPORT_ID_MOUSE, 0x00, 0, speed, 0, 0);
 
-      } else if (!gpio_get(LEFT_BUTTON)) {
-        
-        int speed = 1;
-        if (was_pressed == 0) {
-          button_time = get_absolute_time();
-          was_pressed = 1;
-        } else {
-          if (((to_us_since_boot(get_absolute_time() - button_time)) >= 250000) && ((to_us_since_boot(get_absolute_time() - button_time)) < 500000)) {
-            speed = 2;
-          } else if ((to_us_since_boot(get_absolute_time() - button_time)) < 750000) {
-            speed = 3;
-          } else if ((to_us_since_boot(get_absolute_time() - button_time)) < 1000000) {
-            speed = 5;
+        } else if (!gpio_get(LEFT_BUTTON)) {
+          
+          int speed = 1;
+          if (was_pressed == 0) {
+            button_time = get_absolute_time();
+            was_pressed = 1;
           } else {
-            speed = 10;
+            if (((to_us_since_boot(get_absolute_time() - button_time)) >= 250000) && ((to_us_since_boot(get_absolute_time() - button_time)) < 500000)) {
+              speed = 2;
+            } else if ((to_us_since_boot(get_absolute_time() - button_time)) < 750000) {
+              speed = 3;
+            } else if ((to_us_since_boot(get_absolute_time() - button_time)) < 1000000) {
+              speed = 5;
+            } else {
+              speed = 10;
+            }
           }
-        }
 
-        tud_hid_mouse_report(REPORT_ID_MOUSE, 0x00, (-1 * speed), 0, 0, 0);
+          tud_hid_mouse_report(REPORT_ID_MOUSE, 0x00, (-1 * speed), 0, 0, 0);
 
-      } else {
+        } else {
         was_pressed = 0;
       }
-      
-      
+      } else {
+        gpio_put(TOGGLE_LED, 0);
+        double rad = angle * M_PI / 180.0;
+        int x_spd = 10 * cos(rad);
+        int y_spd = 10 * sin(rad);
+        tud_hid_mouse_report(REPORT_ID_MOUSE, 0x00, x_spd, y_spd, 0, 0);
+        sleep_ms(3);
+        angle++;
+        if (angle >= 360) {
+          angle = 0;
+        }
+      }
       //int8_t const delta = 5;
 
       // no button, right + down, no scroll, no pan
