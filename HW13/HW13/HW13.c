@@ -28,5 +28,19 @@ int main()
     while (true) {
         printf("Hello, world!\n");
         sleep_ms(1000);
+
+        uint8_t address = 0x68; // Address of the chip
+        uint8_t regstr = 0x75; // Address of the WHO_AM_I register
+        
+        uint8_t test_num; // Expecting 0x68 (104 in decimal)
+
+        i2c_write_blocking(i2c_default, address, &regstr, 1, true);  // true to keep master control of bus
+        i2c_read_blocking(i2c_default, address, &test_num, 1, false);  // false - finished with bus
+
+        if (test_num == 0x68) {
+            printf("Looking good! Test successful!\n");
+        } else {
+            printf("Check the chip address or the WHO_AM_I register value that is supposed to be returned.\n");
+        }
     }
 }
