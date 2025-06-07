@@ -29,13 +29,15 @@ int main()
     gpio_pull_up(I2C_SCL);
     // For more examples of I2C use see https://github.com/raspberrypi/pico-examples/tree/master/i2c
 
+    init_mpu6050();
+
     while (true) {
         printf("Hello, world!\n");
         sleep_ms(1000);
 
         /* // Debugging code to test chip address starts here
 
-        void debug_chipaddr_mpu6050()
+        debug_chipaddr_mpu6050()
 
         */ // Debugging code to test chip address ends here
 

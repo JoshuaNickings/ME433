@@ -26,6 +26,7 @@
 #define WHO_AM_I     0x75
 
 #define PICO2LED 25
+#define CHIPADDR 0x68
 
 void debug_chipaddr_mpu6050();
 void init_mpu6050();
