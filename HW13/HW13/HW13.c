@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include "pico/stdlib.h"
-#include "hardware/i2c.h"
 #include "hw13_helper.h"
 
 // I2C defines
@@ -31,10 +28,17 @@ int main()
 
     init_mpu6050();
 
-    while (true) {
-        printf("Hello, world!\n");
-        sleep_ms(1000);
+    float mpu6050_data[7];
 
+    while (true) {
+        // printf("Hello, world!\n");
+        // sleep_ms(1000);
+
+        read_mpu6050(mpu6050_data);
+        printf("X Acceleration: %f\nY Acceleration: %f\nZ Acceleration: %f\n", mpu6050_data[2], mpu6050_data[1], mpu6050_data[0]); // Due to the orietation of the chip, x and z values must swap
+        printf("X Gyro: %f\nY Gyro: %f\nZ Gyro: %f\n", mpu6050_data[4], mpu6050_data[5], mpu6050_data[6]);
+        printf("Temp: %f\n\n", mpu6050_data[3]);
+        
         /* // Debugging code to test chip address starts here
 
         debug_chipaddr_mpu6050()

@@ -30,3 +30,5 @@
 
 void debug_chipaddr_mpu6050();
 void init_mpu6050();
+void read_mpu6050(float * result);
+uint16_t byte_merge(uint8_t high_bits, uint8_t low_bits);

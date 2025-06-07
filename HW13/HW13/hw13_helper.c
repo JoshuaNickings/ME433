@@ -74,7 +74,7 @@ void init_mpu6050() {
     i2c_write_blocking(i2c_default, address, gyro_config_buf, 2, false);
 }
 
-void read_mpu6050() {
+void read_mpu6050(float * result) {
     uint8_t address = CHIPADDR; // Address of the chip
     uint8_t starting_reg = ACCEL_XOUT_H; //Address of ACCEL_XOUT_H
 
@@ -84,12 +84,10 @@ void read_mpu6050() {
     i2c_write_blocking(i2c_default, address, &starting_reg, 1, true);  // true to keep master control of bus
     i2c_read_blocking(i2c_default, address, output_data, num_of_expected_data, false);  // false - finished with bus
 
-    float result[7];
-
     result[0] = byte_merge(output_data[0], output_data[1]) * 0.000061; //ACCEL_XOUT
     result[1] = byte_merge(output_data[2], output_data[3]) * 0.000061; //ACCEL_YOUT
     result[2] = byte_merge(output_data[4], output_data[5]) * 0.000061; //ACCEL_ZOUT
-    result[3] = byte_merge(output_data[6], output_data[7]) / 340.00 + 36.53; //TEMP_OUT
+    result[3] = (byte_merge(output_data[6], output_data[7]) / 340.0) + 36.53; //TEMP_OUT
     result[4] = byte_merge(output_data[8], output_data[9]) * 0.007630; //GYRO_XOUT
     result[5] = byte_merge(output_data[10], output_data[11]) * 0.007630; //GYRO_YOUT
     result[6] = byte_merge(output_data[12], output_data[13]) * 0.007630; //GYRO_ZOUT
