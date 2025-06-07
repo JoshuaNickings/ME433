@@ -46,7 +46,21 @@ int main()
         printf("X Gyro: %f\nY Gyro: %f\nZ Gyro: %f\n", mpu6050_data[4], mpu6050_data[5], mpu6050_data[6]);
         printf("Temp: %f\n\n", mpu6050_data[3]);
 
-        drawLine(64, 16, 30, -30);
+        int x_center = 64; // x position of the center of the screen
+        int y_center = 16; // y position of the center of the screen
+
+        int x_screen = 128; // length of the screen in the x direction
+        int y_screen = 32; // length of the screen in the y direction
+
+        int x_mag = (mpu6050_data[2] / 1.0) * ((x_screen / 2.0) - 5);
+        int y_mag = (mpu6050_data[1] / 1.0) * ((y_screen / 2.0) - 5);
+
+        int len = sqrt(pow(x_mag, 2) + pow(y_mag, 2));
+
+        int angle = atan2(y_mag, x_mag) * 180 / M_PI;
+        
+        ssd1306_clear();
+        drawLine(x_center, y_center, len, angle);
         ssd1306_update();
 
         sleep_ms(10);
