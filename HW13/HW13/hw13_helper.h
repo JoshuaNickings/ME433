@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include "pico/stdlib.h"
+#include "hardware/i2c.h"
+
 // config registers
 #define CONFIG 0x1A
 #define GYRO_CONFIG 0x1B
@@ -21,4 +25,7 @@
 #define GYRO_ZOUT_L  0x48
 #define WHO_AM_I     0x75
 
+#define PICO2LED 25
+
+void debug_chipaddr_mpu6050();
 void init_mpu6050();
