@@ -1,4 +1,7 @@
 #include "hw13_helper.h"
+#include "ssd1306.h"
+#include "font.h"
+#include "display.h"
 
 // I2C defines
 // This example will use I2C0 on GPIO4 (SDA) and GPIO5 (SCL) running at 400KHz.
@@ -28,6 +31,10 @@ int main()
 
     init_mpu6050();
 
+    ssd1306_setup();
+    ssd1306_clear();
+    ssd1306_update();
+
     float mpu6050_data[7];
 
     while (true) {
@@ -38,6 +45,8 @@ int main()
         printf("X Acceleration: %f\nY Acceleration: %f\nZ Acceleration: %f\n", mpu6050_data[2], mpu6050_data[1], mpu6050_data[0]); // Due to the orietation of the chip, x and z values must swap
         printf("X Gyro: %f\nY Gyro: %f\nZ Gyro: %f\n", mpu6050_data[4], mpu6050_data[5], mpu6050_data[6]);
         printf("Temp: %f\n\n", mpu6050_data[3]);
+
+
         sleep_ms(10);
         
         /* // Debugging code to test chip address starts here
