@@ -36,9 +36,9 @@ void drawLine(int x, int y, int length_px, int angle) {
         }
 
         if (i * sin(rad) < 0) {
-            dy = i * sin(rad) - 0.5;
+            dy = -1 * (i * sin(rad) - 0.5);
         } else {
-            dy = i * sin(rad) + 0.5;
+            dy = -1 * (i * sin(rad) + 0.5);
         }
 
         ssd1306_drawPixel(x + dx, y + dy, 1);

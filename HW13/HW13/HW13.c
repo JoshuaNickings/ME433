@@ -46,6 +46,8 @@ int main()
         printf("X Gyro: %f\nY Gyro: %f\nZ Gyro: %f\n", mpu6050_data[4], mpu6050_data[5], mpu6050_data[6]);
         printf("Temp: %f\n\n", mpu6050_data[3]);
 
+        drawLine(64, 16, 30, -30);
+        ssd1306_update();
 
         sleep_ms(10);
         
