@@ -38,6 +38,7 @@ int main()
         printf("X Acceleration: %f\nY Acceleration: %f\nZ Acceleration: %f\n", mpu6050_data[2], mpu6050_data[1], mpu6050_data[0]); // Due to the orietation of the chip, x and z values must swap
         printf("X Gyro: %f\nY Gyro: %f\nZ Gyro: %f\n", mpu6050_data[4], mpu6050_data[5], mpu6050_data[6]);
         printf("Temp: %f\n\n", mpu6050_data[3]);
+        sleep_ms(10);
         
         /* // Debugging code to test chip address starts here
 
