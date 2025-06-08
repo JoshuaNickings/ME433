@@ -2050,13 +2050,12 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "VCC"
-			(at 121.92 45.7199 0)
+		(property "Value" "Vcc"
+			(at 119.38 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Footprint" ""
@@ -2728,13 +2727,12 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "VCC"
-			(at 154.94 45.7199 0)
+		(property "Value" "Vcc"
+			(at 152.4 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Footprint" ""
@@ -3554,13 +3552,12 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "VCC"
-			(at 146.05 45.7199 0)
+		(property "Value" "Vcc"
+			(at 143.51 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Footprint" ""
