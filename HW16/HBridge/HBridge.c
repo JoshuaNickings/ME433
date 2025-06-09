@@ -68,11 +68,11 @@ int main()
         char input[1];
         scanf("%c", input);
         if (input[0] == 43) {
-            motor1_duty_percent = motor1_duty_percent + 10;
-            motor2_duty_percent = motor2_duty_percent + 10;
+            motor1_duty_percent = motor1_duty_percent + 1;
+            motor2_duty_percent = motor2_duty_percent + 1;
         } else if (input[0] == 45) {
-            motor1_duty_percent = motor1_duty_percent - 10;
-            motor2_duty_percent = motor2_duty_percent - 10;
+            motor1_duty_percent = motor1_duty_percent - 1;
+            motor2_duty_percent = motor2_duty_percent - 1;
         } else {
             continue;
         }
